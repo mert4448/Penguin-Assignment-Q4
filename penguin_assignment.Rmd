@@ -1,0 +1,73 @@
+---
+title: "penguin_assignment"
+output: html_document
+---
+
+```{r echo=FALSE}}
+
+setwd("C:/Users/Caroline/OneDrive/Biology Year Three/RStudio/PenguinProject")
+
+penguins_raw <- read.csv("C:\\Users\\Caroline\\OneDrive\\Biology Year Three\\RStudio\\PenguinProject\\data_raw\\penguins_raw.csv")
+source("C:\\Users\\Caroline\\OneDrive\\Biology Year Three\\RStudio\\PenguinProject\\cleaning_function.R")
+
+```
+
+```{r}
+cleaning <- function(data_raw){
+  data_raw %>%
+    remove_empty(c("rows", "cols")) %>%
+    select(-starts_with("delta")) %>%
+    
+  clean_names()
+}
+
+penguins_clean <- cleaning(penguins_raw)
+head(penguins_clean)
+```
+
+# Statistical Test
+
+An ANOVA Test to determine whether there is any significant difference between the bill length of different species of penguin.
+
+```{r}
+# Fit a linear model to our data (using the lm function) 
+# lm(response_variable ~ explanatory_variable, data)
+ Model1 <- lm(culmen_length_mm ~ species, penguins_clean)
+summary(Model1)
+```
+
+```{r}
+# Generate an ANOVA table from that linear model (using the anova function)
+anova(Model1)
+
+```
+The numerator degrees of freedom is 2
+The denominator degrees of freedom is 399
+The alpha value is 0.05
+
+The given F Critical Value is 3.02236
+The F Statistic is 410.6
+
+The F Critical Value is much less than our F value, therefore our results are extremely significant and there is a significant difference between the bill lengths of different species of penguin.
+
+```{r}
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+df <- data.frame(x = c(penguins_clean$species), y = c(penguins_clean$culmen_length_mm))
+df
+```
+```{r}
+ggplot(df, aes(x, y, desc_stat = "mean_sd", error.plot = "errorbar",add = "mean")) +
+  geom_point(aes(color=penguins_clean$species)) +
+  scale_color_manual(values=c("purple", "steelblue", "skyblue")) +
+  labs(title = "Bill Length by Penguin Species") +
+ylab("Bill Length in mm") +
+xlab("Species") +
+  scale_x_discrete(labels=c("Adelie","Chinstrap","Gentoo")) +
+  stat_summary(fun.data = "mean_cl_normal", geom = "crossbar")
+  
+```
+
