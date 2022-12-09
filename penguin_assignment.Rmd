@@ -5,10 +5,10 @@ output: html_document
 
 ```{r echo=FALSE}}
 
-setwd("C:/Users/Caroline/OneDrive/Biology Year Three/RStudio/PenguinProject")
+setwd("PenguinProject")
 
-penguins_raw <- read.csv("C:\\Users\\Caroline\\OneDrive\\Biology Year Three\\RStudio\\PenguinProject\\data_raw\\penguins_raw.csv")
-source("C:\\Users\\Caroline\\OneDrive\\Biology Year Three\\RStudio\\PenguinProject\\cleaning_function.R")
+penguins_raw <- read.csv("PenguinProject\\data_raw\\penguins_raw.csv")
+source("PenguinProject\\cleaning_function.R")
 
 ```
 
